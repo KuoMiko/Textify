@@ -2,7 +2,7 @@
 
 This repository contains an API based application that has python as a back-end code and HTML as the front-end code. The application allows user to classify environmental sound and transcribe speech into text.
 
-<img src="./demo.png" style="max-width:600px; width:100%">
+![demo](https://github.com/user-attachments/assets/1802ffb5-2fc1-4321-941a-33e506427c40)
 
 ## Getting started
 
