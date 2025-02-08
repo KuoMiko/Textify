@@ -1,0 +1,17 @@
+flask
+flask_socketio
+pyaudio
+time
+threading
+queue
+tensorflow
+numpy
+csv
+matplotlib
+IPython
+scipy.io
+keras_yamnet
+flask_cors
+ngrok
+os
+
