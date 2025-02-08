@@ -57,7 +57,6 @@ queue
 tensorflow
 numpy
 csv
-matplotlib
 IPython
 scipy.io
 keras_yamnet
