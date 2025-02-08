@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Audio Classifier</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Default light theme */
+        :root {
+            --primary-bg-color: #f9f9f9;
+            --primary-color: #1E90FF; /* Blue */
+            --button-bg-color: #1E90FF;
+            --button-hover-color: #4682B4; /* Lighter Blue */
+            --danger-bg-color: #f44336;
+            --text-color: #c5c5c5;
+            --button-radius: 30px; /* Rounded buttons */
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--primary-bg-color);
+            text-align: center;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 36px;
+        }
+
+        button {
+            background-color: var(--button-bg-color);
+            color: white;
+            border: none;
+            border-radius: var(--button-radius);
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        #results {
+            margin-top: 20px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+        }
+
+        #danger-warning {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--danger-bg-color);
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+        }
+
+        select {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            border: none;
+        }
+
+        #speech-to-text {
+            margin-top: 20px;
+            background-color: #1E90FF;
+        }
+
+        #transcription {
+            margin-top: 10px;
+            font-size: 18px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>TEXTIFY</h1>
+    <button onclick="startStream()">Start Stream</button>
+    <button onclick="stopStream()">Stop Stream</button>
+
+    <div id="results">
+        <h2>Classified Sound:</h2>
+        <p id="classification">Waiting for classification...</p>
+    </div>
+
+    <!-- Danger warning message -->
+    <div id="danger-warning">DANGER: Harmful sound detected!</div>
+
+    <!-- Speech-to-text functionality -->
+    <button id="speech-to-text" onclick="toggleSpeechRecognition()">Start Speech-to-Text</button>
+    <div id="transcription">Transcription: None</div>
+
+    <script>
+        const socket = io.connect('public server link from ngrok');
+
+        // Function to start the audio stream
+        function startStream() {    
+            socket.emit('start_audio_stream');
+            document.getElementById('classification').innerText = 'Listening for classification...';
+        }
+
+        // Function to stop the audio stream
+        function stopStream() {
+            socket.emit('stop_audio_stream');
+            document.getElementById('classification').innerText = 'Stream stopped.';
+        }
+
+        // Listen for the 'classification' event from the server
+        socket.on('classification', (data) => {
+            document.getElementById('classification').innerText = `${data}`;
+        });
+
+        // Listen for the 'danger_warning' event from the server
+        socket.on('danger_warning', (message) => {
+            // Show the danger warning
+            document.getElementById('danger-warning').innerText = message;
+            document.getElementById('danger-warning').style.display = 'block'; // Show the danger warning
+
+            // Set a timeout to hide the warning after 5 seconds
+            setTimeout(() => {
+                document.getElementById('danger-warning').style.display = 'none'; // Hide the warning after 5 seconds
+            }, 7000);
+        });
+
+        // Speech-to-text setup
+        let recognition;
+        let isRecognizing = false;
+
+        function toggleSpeechRecognition() {
+            if (isRecognizing) {
+                recognition.stop();
+                document.getElementById('speech-to-text').innerText = "Start Speech-to-Text";
+            } else {
+                startSpeechRecognition();
+            }
+            isRecognizing = !isRecognizing;
+        }
+
+        // Start the Speech Recognition
+        function startSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert("Speech recognition is not supported by your browser.");
+                return;
+            }
+
+            recognition = new webkitSpeechRecognition();
+            recognition.lang = "en-US";
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onstart = function() {
+                document.getElementById('speech-to-text').innerText = "Stop Speech-to-Text";
+                document.getElementById('transcription').innerText = "Transcription: Listening...";
+            };
+
+            recognition.onresult = function(event) {
+                let transcription = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcription += event.results[i][0].transcript;
+                }
+                document.getElementById('transcription').innerText = `Transcription: ${transcription}`;
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Speech recognition error", event);
+            };
+
+            recognition.onend = function() {
+                document.getElementById('speech-to-text').innerText = "Start Speech-to-Text";
+            };
+
+            recognition.start();
+        }
+
+    
+
+
+    </script>
+
+</body>
+</html>
