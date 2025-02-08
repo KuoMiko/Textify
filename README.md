@@ -52,7 +52,6 @@ Install the ngrok. This is necessary to make your server accessible on your phon
 flask
 flask_socketio
 pyaudio
-time
 threading
 queue
 tensorflow
