@@ -3,7 +3,6 @@ flask_socketio
 pyaudio
 tensorflow
 numpy
-csv
 IPython
 scipy.io
 keras_yamnet
