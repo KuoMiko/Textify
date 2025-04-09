@@ -8,5 +8,3 @@ scipy
 keras_yamnet
 flask_cors
 ngrok
-os
-
