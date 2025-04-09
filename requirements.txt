@@ -5,6 +5,6 @@ tensorflow
 numpy
 IPython
 scipy
-keras_yamnet
+keras
 flask_cors
 ngrok
