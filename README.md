@@ -1,6 +1,6 @@
 # Textify
 
-This repository contains an API based application that has python as a backend code and HTML as the front-end code. The application allows user to classify environmental sounds and transcribe speech into text
+This repository contains an API based application that has python as a backend code and HTML as the front-end code. The application allows user to classify environmental sounds and transcribe speech into text. Note that this only works for Python 3.10.
 
 by Baby Blink A. Biongcog, Robin Alexandra B. Remollo, Tristan Alejandro F. Bariñan
 
