@@ -1,8 +1,6 @@
 flask
 flask_socketio
 pyaudio
-threading
-queue
 tensorflow
 numpy
 csv
