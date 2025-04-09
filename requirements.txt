@@ -4,7 +4,7 @@ pyaudio
 tensorflow
 numpy
 IPython
-scipy.io
+scipy
 keras_yamnet
 flask_cors
 ngrok
